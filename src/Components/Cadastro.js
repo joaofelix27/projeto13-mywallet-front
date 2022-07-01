@@ -1,18 +1,70 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [senhaconf, setSenhaconf] = useState("");
+  const [nome, setNome] = useState("");
+  const navigate = useNavigate();
+
+  function fazerCadastro(event) {
+    event.preventDefault();
+
+    if (senha!==senhaconf){
+      alert("Senhas não conferem")
+      return;
+    }
+    if (email !== "") {
+      const URL = `http://localhost:5000/cadastro`;
+      const profileData = {
+        email: email,
+        name: nome,
+        password: senha,
+      };
+      const promise = axios.post(URL, profileData);
+      promise.then((response) => {
+        const { data } = response;
+        console.log(data);
+        navigate("/");
+      });
+
+      promise.catch((err) => {
+        alert("Erro no cadastro!");
+      });
+    }
+  }
+
   function montarFormularioLogin() {
     return (
       <>
         <form>
-          <input type="text" placeholder="Nome"></input>
-          <input type="email" placeholder="E-mail"></input>
-          <input type="password" placeholder="Senha"></input>
-          <input type="password" placeholder="Confirme a senha"></input>
+          <input
+            type="text"
+            placeholder="Nome"
+            onChange={(e) => setNome(e.target.value)}
+          ></input>
+          <input
+            type="email"
+            placeholder="E-mail"
+            onChange={(e) => setEmail(e.target.value)}
+          ></input>
+          <input
+            type="password"
+            placeholder="Senha"
+            onChange={(e) => setSenha(e.target.value)}
+          ></input>
+          <input
+            type="password"
+            placeholder="Confirme a senha"
+            onChange={(e) => setSenhaconf(e.target.value)}
+          ></input>
           <button type="submit">Cadastrar</button>
         </form>
-        <Link to="/" style={{ textDecoration: 'none' }} >
+        <Link to="/" style={{ textDecoration: "none" }}>
           <h1>Já tem uma conta? Entre agora!</h1>
         </Link>
       </>
@@ -23,7 +75,9 @@ function Login() {
   return (
     <Container>
       <h1>MyWallet</h1>
-      <FormularioLogin>{formularioLogin}</FormularioLogin>
+      <FormularioLogin onSubmit={fazerCadastro}>
+        {formularioLogin}
+      </FormularioLogin>
     </Container>
   );
 }
@@ -84,14 +138,14 @@ const FormularioLogin = styled.div`
     line-height: 23px;
     letter-spacing: 0em;
     color: #ffffff;
-    margin-bottom:32px;
+    margin-bottom: 32px;
   }
   h1 {
     font-family: Raleway;
     font-size: 15px;
     font-weight: 700;
     line-height: 18px;
-    color: #FFFFFF;
-    text-align:center;
+    color: #ffffff;
+    text-align: center;
   }
 `;
