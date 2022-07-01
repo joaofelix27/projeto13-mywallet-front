@@ -1,5 +1,5 @@
-import { createGlobalStyle } from 'styled-components';
- 
+import { createGlobalStyle } from "styled-components";
+
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -49,6 +49,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
+    font-family: 'Raleway', sans-serif;
     font-family: 'Saira Stencil One', cursive;
     background-color: #8C11BE;
   }
@@ -56,9 +57,9 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   ::placeholder { 
-    color: #DBDBDB;
+    color: #000000;
 
   }
 `;
- 
+
 export default GlobalStyle;
