@@ -3,6 +3,7 @@ import { useState } from "react";
 import  GlobalStyle from "../assets/globalstyle"
 import Login from "./Login";
 import Cadastro from './Cadastro'
+import Registros from "./Registros";
 
 function App() {
   const [login, setLogin] = useState({});
@@ -18,6 +19,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/cadastro" element={<Cadastro />} />
+            <Route path="/registros" element={<Registros />} />
           </Routes>
         </BrowserRouter>
     </>
