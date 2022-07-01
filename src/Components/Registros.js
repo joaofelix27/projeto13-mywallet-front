@@ -1,6 +1,8 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 export default function Registros() {
+  const navigate = useNavigate();
   return (
     <>
       <Container>
@@ -10,11 +12,11 @@ export default function Registros() {
         </Top>
         <Body></Body>
         <Bottom>
-          <div>
+          <div onClick={()=> navigate("/novoRegistro")}>
             <ion-icon name="add-circle-outline"></ion-icon>
             <h2>Nova entrada</h2>
           </div>
-          <div>
+          <div onClick={()=> navigate("/novoRegistro")}>
             <ion-icon name="remove-circle-outline"></ion-icon>
             <h2>Nova saída</h2>
           </div>
