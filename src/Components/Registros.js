@@ -1,8 +1,11 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState, useContext } from "react";
+import UserContext from "./UserContext";
 
 export default function Registros() {
   const navigate = useNavigate();
+  const { income, setIncome } = useContext(UserContext);
   return (
     <>
       <Container>
@@ -12,11 +15,19 @@ export default function Registros() {
         </Top>
         <Body></Body>
         <Bottom>
-          <div onClick={()=> navigate("/novoRegistro")}>
+          <div onClick={()=> {
+            navigate("/novoRegistro")
+            setIncome(true)
+          }
+          }>
             <ion-icon name="add-circle-outline"></ion-icon>
             <h2>Nova entrada</h2>
           </div>
-          <div onClick={()=> navigate("/novoRegistro")}>
+          <div onClick={()=> {
+          navigate("/novoRegistro")
+          setIncome(false)
+          }
+        }>
             <ion-icon name="remove-circle-outline"></ion-icon>
             <h2>Nova saída</h2>
           </div>
