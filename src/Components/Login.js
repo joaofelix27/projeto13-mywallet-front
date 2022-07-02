@@ -1,14 +1,37 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const navigate = useNavigate();
+  function fazerLogin(event) {
+    event.preventDefault();
+
+    if (email !== "") {
+      const URL = `http://localhost:5000/login`;
+      const profileData = {
+        email: email,
+        password: senha,
+      };
+      const promise = axios.post(URL, profileData);
+      promise.then((response) => {
+        navigate("/registros");
+      }).catch((err) => {
+        alert("Erro no Login, dados incorretos!");
+      });
+    }
+  }
+
   function montarFormularioLogin() {
     return (
       <>
         <form>
-          <input type="email" placeholder="E-mail"></input>
-          <input type="password" placeholder="Senha"></input>
+          <input type="email" placeholder="E-mail" onChange={(e) => setEmail(e.target.value)}></input>
+          <input type="password" placeholder="Senha" onChange={(e) => setSenha(e.target.value)}></input>
           <button type="submit">Entrar</button>
         </form>
         <Link to="/cadastro" style={{ textDecoration: 'none' }} >
@@ -22,7 +45,7 @@ function Login() {
   return (
     <Container>
       <h1>MyWallet</h1>
-      <FormularioLogin>{formularioLogin}</FormularioLogin>
+      <FormularioLogin onSubmit={fazerLogin}>{formularioLogin}</FormularioLogin>
     </Container>
   );
 }

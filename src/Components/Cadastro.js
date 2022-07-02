@@ -27,13 +27,18 @@ function Login() {
       };
       const promise = axios.post(URL, profileData);
       promise.then((response) => {
-        const { data } = response;
-        console.log(data);
-        navigate("/");
-      });
-
-      promise.catch((err) => {
-        alert("Erro no cadastro!");
+        console.log(response);
+        if(response.status===201){
+          alert("E-mail cadastrado!")
+          navigate("/");
+        }
+      }).catch((err) => {
+        if(err.response.status===409){
+          alert("E-mail já cadastrado!")
+        } else {
+          alert("Erro no cadastro!");
+        }
+        
       });
     }
   }
