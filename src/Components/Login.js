@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import {  useState, useContext } from "react";
+import UserContext from "./UserContext";
 import axios from "axios";
 
 function Login() {
+  const { token, setToken } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const navigate = useNavigate();
@@ -20,6 +22,8 @@ function Login() {
       const promise = axios.post(URL, profileData);
       promise.then((response) => {
         navigate("/registros");
+        setToken(response.data.token)
+        console.log(token)
       }).catch((err) => {
         alert("Erro no Login, dados incorretos!");
       });
