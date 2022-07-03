@@ -21,9 +21,13 @@ function Login() {
       };
       const promise = axios.post(URL, profileData);
       promise.then((response) => {
+        const { data} =response
+        const dadosLoginString = JSON.stringify(data.token);
+        const nameString = JSON.stringify(data.name);
+        window.localStorage.setItem("dadosLogin", dadosLoginString);
+        window.localStorage.setItem("name", nameString);
+        setToken(data.token)
         navigate("/registros");
-        setToken(response.data.token)
-        console.log(token)
       }).catch((err) => {
         alert("Erro no Login, dados incorretos!");
       });

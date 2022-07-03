@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {  useState, useContext } from "react";
+import {  useState, useContext, useEffect } from "react";
 import UserContext from "./UserContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -10,8 +10,21 @@ export default function Entrada() {
   const [description, setDescription] = useState("");
   const navigate= useNavigate()
 
+  useEffect(() => {
+    const dadosLogin = window.localStorage.getItem("dadosLogin");
+    if (dadosLogin) {
+      const dadosLoginOBJ = JSON.parse(dadosLogin);
+      setToken(dadosLoginOBJ);
+    } else {
+      navigate("/");
+    }
+  }, [setToken,navigate]);
+
+
   function registrarEntrada(event) {
     event.preventDefault();
+
+    console.log(token)
 
     const config = {
       headers: { Authorization: `Bearer ${token}` }
@@ -22,7 +35,7 @@ export default function Entrada() {
       const incomeData = {
         value,
         description,
-        type: "income"
+        type: "income",
       };
       const promise = axios.post(URL, incomeData, config);
       promise.then((response) => {
