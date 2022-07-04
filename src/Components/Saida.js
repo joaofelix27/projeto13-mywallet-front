@@ -52,6 +52,7 @@ export default function Saida() {
         <form>
           <input
             type="number"
+            step="0.01"
             placeholder="Valor"
             onChange={(e) => setValue(e.target.value)}
           ></input>

@@ -8,33 +8,49 @@ export default function Registros() {
   const { token, setToken } = useContext(UserContext);
   const navigate = useNavigate();
   const [name, setName] = useState("");
+  const [balance, setBalance] = useState(0);
+  const [register, setRegister] = useState([]);
 
   useEffect(() => {
     const dadosLogin = window.localStorage.getItem("dadosLogin");
-    const name= window.localStorage.getItem("name");
+    const name = window.localStorage.getItem("name");
     if (dadosLogin) {
       const dadosLoginOBJ = JSON.parse(dadosLogin);
       const nameOBJ = JSON.parse(name);
       setToken(dadosLoginOBJ);
-      setName(nameOBJ)
+      setName(nameOBJ);
+      const config = {
+        headers: { Authorization: `Bearer ${token}` },
+      };
+      const URL = `http://localhost:5000/entrada`;
+      const promise = axios.get(URL, config);
+      promise
+        .then((response) => {
+          const { data } = response;
+          setRegister(data);
+        })
+        .catch((err) => {
+          console.log("Carregando");
+        });
     } else {
       navigate("/");
     }
-    const config = {
-      headers: { Authorization: `Bearer ${token}` },
-    };
-    const URL = `http://localhost:5000/entrada`;
-    const promise = axios.get(URL, config);
-    promise
-      .then((response) => {
-        const { data } = response;
-        console.log(data);
-      })
-      .catch((err) => {
-        alert("");
-      });
-  }, [setToken, navigate]);
+  }, [setToken, token, setName, name]);
 
+  useEffect(() => {
+    if (register.length !== 0) {
+      let aux = 0;
+      for (let i = 0; i < register.length; i++) {
+        if (register[i].type === "income") {
+          aux += Number(register[i].value);
+        } else {
+          aux -= Number(register[i].value);
+        }
+      }
+      const auxFormated= (Math.round(aux * 100) / 100).toFixed(2)
+      setBalance(auxFormated);
+    }
+  }, [balance, setBalance, register, setRegister]);
   return (
     <>
       <Container>
@@ -47,7 +63,27 @@ export default function Registros() {
             name="exit-outline"
           ></ion-icon>
         </Top>
-        <Body></Body>
+        {register.length === 0 ? (
+          <Empty> Não há registros de entrada ou saída </Empty>
+        ) : (
+          <Body>
+            {register.map((value, index) => (
+              <Registro type={value.type} key={index}>
+                <h2>{value.time}</h2>
+                <div>
+                  <h1> {value.description} </h1>
+                </div>
+                <h3> {value.value}</h3>
+              </Registro>
+            ))}
+            <Balance value={balance}>
+              <h1>
+                <strong>SALDO</strong>
+              </h1>
+              <h2>{register.length === 0 ? "Carregando" : balance}</h2>
+            </Balance>
+          </Body>
+        )}
         <Bottom>
           <div
             onClick={() => {
@@ -101,15 +137,102 @@ const Top = styled.div`
     color: #ffffff;
   }
 `;
-
-const Body = styled.div`
+const Empty = styled.div`
+  padding: 0 73px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-top: 22px;
   height: 446px;
   width: 326px;
-  left: 25px;
-  top: 78px;
   border-radius: 5px;
   background-color: #ffffff;
+  font-family: Raleway;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 23px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #868686;
+`;
+
+const Body = styled.div`
+  display: flex;
+  padding: 0 13px;
+  padding-top: 23px;
+  flex-direction: column;
+  margin-top: 22px;
+  height: 446px;
+  width: 326px;
+  border-radius: 5px;
+  background-color: #ffffff;
+  font-family: Raleway;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 23px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #868686;
+  position: relative;
+`;
+const Balance = styled.div`
+  left: 13px;
+  width: 290px;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 5px;
+
+  h1 {
+    font-family: Raleway;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0em;
+    color: #000000;
+  }
+  h2 {
+    font-family: Raleway;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 20px;
+    letter-spacing: 0em;
+    color: ${(props) => (props.value > 0  ? "#03AC00" : "#C70000")}
+  }
+`;
+
+const Registro = styled.div`
+  display: flex;
+  justify-content: space-between;
+  div {
+    width: 200px;
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    h1 {
+      font-family: Raleway;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 19px;
+      color: #000000;
+    }
+  }
+
+  h2 {
+    font-family: Raleway;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+    color: #c6c6c6;
+  }
+  h3 {
+    font-family: Raleway;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+    letter-spacing: 0em;
+    color: ${(props) => (props.type === "income" ? "#03AC00" : "#C70000")};
+  }
 `;
 const Bottom = styled.div`
   margin-top: 13px;

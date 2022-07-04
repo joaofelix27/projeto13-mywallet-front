@@ -50,7 +50,7 @@ export default function Entrada() {
     return (
       <>
         <form>
-          <input type="number" placeholder="Valor" onChange={(e) => setValue(e.target.value)}></input>
+          <input type="number" step="0.01" placeholder="Valor" onChange={(e) => setValue(e.target.value)}></input>
           <input type="text" placeholder="Descrição" onChange={(e) => setDescription(e.target.value)}></input>
           <button type="submit">Salvar entrada</button>
         </form>
