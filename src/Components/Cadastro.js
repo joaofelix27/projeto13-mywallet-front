@@ -19,7 +19,7 @@ function Login() {
       return;
     }
     if (email !== "") {
-      const URL = `http://localhost:5000/cadastro`;
+      const URL = `https://mywallet27.herokuapp.com/cadastro`;
       const profileData = {
         email: email,
         name: nome,

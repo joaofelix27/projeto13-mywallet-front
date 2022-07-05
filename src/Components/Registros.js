@@ -22,7 +22,7 @@ export default function Registros() {
       const config = {
         headers: { Authorization: `Bearer ${token}` },
       };
-      const URL = `http://localhost:5000/entrada`;
+      const URL = `https://mywallet27.herokuapp.com/entrada`;
       const promise = axios.get(URL, config);
       promise
         .then((response) => {
@@ -47,7 +47,7 @@ export default function Registros() {
           aux -= Number(register[i].value);
         }
       }
-      const auxFormated= (Math.round(aux * 100) / 100).toFixed(2)
+      const auxFormated = (Math.round(aux * 100) / 100).toFixed(2);
       setBalance(auxFormated);
     }
   }, [balance, setBalance, register, setRegister]);
@@ -68,12 +68,16 @@ export default function Registros() {
         ) : (
           <Body>
             {register.map((value, index) => (
-              <Registro type={value.type} key={index}>
-                <h2>{value.time}</h2>
-                <div>
+              <Registro key={index}>
+                <Date>
+                  <h2>{value.time}</h2>
+                </Date>
+                <Description>
                   <h1> {value.description} </h1>
-                </div>
-                <h3> {value.value}</h3>
+                </Description>
+                <Value type={value.type}>
+                  <h3> {value.value}</h3>
+                </Value>
               </Registro>
             ))}
             <Balance value={balance}>
@@ -177,7 +181,7 @@ const Body = styled.div`
 `;
 const Balance = styled.div`
   left: 13px;
-  width: 290px;
+  width: 300px;
   display: flex;
   justify-content: space-between;
   position: absolute;
@@ -193,38 +197,46 @@ const Balance = styled.div`
   }
   h2 {
     font-family: Raleway;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+    letter-spacing: 0em;
+    color: ${(props) => (props.value > 0  ? "#03AC00" : "#C70000")};
+  }
+`;
+const Registro = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+const Date = styled.div`
+  width: 20%;
+  h2 {
+    font-family: Raleway;
     font-size: 17px;
     font-weight: 400;
     line-height: 20px;
     letter-spacing: 0em;
-    color: ${(props) => (props.value > 0  ? "#03AC00" : "#C70000")}
+    color: #c6c6c6;
   }
 `;
-
-const Registro = styled.div`
+const Description = styled.div`
+  width: 60%;
   display: flex;
-  justify-content: space-between;
-  div {
-    width: 200px;
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    h1 {
-      font-family: Raleway;
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 19px;
-      color: #000000;
-    }
-  }
-
-  h2 {
+  justify-content: left;
+  align-items: center;
+  h1 {
     font-family: Raleway;
     font-size: 16px;
     font-weight: 400;
     line-height: 19px;
-    color: #c6c6c6;
+    color: #000000;
   }
+`;
+const Value = styled.div`
+  width: 20%;
+  display: flex;
+  justify-content: right;
+  align-items: center;
   h3 {
     font-family: Raleway;
     font-size: 16px;

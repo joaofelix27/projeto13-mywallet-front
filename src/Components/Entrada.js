@@ -31,7 +31,7 @@ export default function Entrada() {
   };
 
     if (description !== "" && value !==0) {
-      const URL = `http://localhost:5000/entrada`;
+      const URL = `https://mywallet27.herokuapp.com/entrada`;
       const incomeData = {
         value,
         description,
